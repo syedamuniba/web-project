@@ -1,272 +1,179 @@
-// Business Page - Form Handling & Data Management
+﻿// Business Form - Simple & Clean
 
 document.addEventListener('DOMContentLoaded', function() {
-  
-  // ==================== FORM HANDLING ====================
   const form = document.querySelector('.form-card');
-  
-  if (form) {
-    // Get all form inputs
-    const fullNameInput = form.querySelector('input[type="text"]');
-    const phoneInput = form.querySelector('input[type="tel"]');
-    const emailInput = form.querySelector('input[type="email"]');
-    const countrySelect = form.querySelector('select');
-    const messageTextarea = form.querySelector('textarea');
-    const consent1 = form.querySelector('#consent1');
-    const consent2 = form.querySelector('#consent2');
-    const submitButton = form.querySelector('.btn-submit');
+  if (!form) return;
 
-    // Load saved data from localStorage when page loads
-    loadFormData();
+  // Get form elements
+  const fullName = form.querySelector('input[type="text"]');
+  const phone = form.querySelector('input[type="tel"]');
+  const email = form.querySelector('input[type="email"]');
+  const country = form.querySelector('select');
+  const message = form.querySelector('textarea');
+  const consent = form.querySelector('#consent1');
+  const submitBtn = form.querySelector('.btn-submit');
 
-    // Save form data to localStorage as user types
-    const inputs = [fullNameInput, phoneInput, emailInput, countrySelect, messageTextarea];
-    inputs.forEach(input => {
+  // Initialize
+  loadSavedData();
+  setupEventListeners();
+
+  // ========== EVENT LISTENERS ==========
+  function setupEventListeners() {
+    // Save data while typing
+    [fullName, phone, email, country, message].forEach(input => {
       if (input) {
-        input.addEventListener('input', saveFormData);
-        input.addEventListener('change', saveFormData);
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
       }
     });
 
-    // Handle form submission
-    submitButton.addEventListener('click', handleFormSubmit);
+    // Validation on blur
+    if (email) email.addEventListener('blur', validateEmail);
+    if (phone) phone.addEventListener('blur', validatePhone);
 
-    // Auto-save consent checkboxes
-    if (consent1) consent1.addEventListener('change', saveFormData);
-    if (consent2) consent2.addEventListener('change', saveFormData);
+    // Submit form
+    submitBtn.addEventListener('click', handleSubmit);
 
-    // Real-time validation
-    if (emailInput) {
-      emailInput.addEventListener('blur', validateEmail);
-    }
-    if (phoneInput) {
-      phoneInput.addEventListener('blur', validatePhone);
-    }
-
-    // Show success animation on valid input
-    inputs.forEach(input => {
-      if (input) {
-        input.addEventListener('focus', function() {
-          this.style.borderColor = '#c9a96e';
-          this.style.boxShadow = '0 0 0 2px rgba(201, 169, 110, 0.1)';
-        });
-        input.addEventListener('blur', function() {
-          this.style.boxShadow = 'none';
-        });
-      }
-    });
+    // Save consent
+    if (consent) consent.addEventListener('change', saveData);
   }
 
-  // ==================== FORM DATA FUNCTIONS ====================
-
-  function saveFormData() {
-    const formData = {
-      fullName: fullNameInput ? fullNameInput.value : '',
-      phone: phoneInput ? phoneInput.value : '',
-      email: emailInput ? emailInput.value : '',
-      country: countrySelect ? countrySelect.value : '',
-      message: messageTextarea ? messageTextarea.value : '',
-      consent1: consent1 ? consent1.checked : false,
-      consent2: consent2 ? consent2.checked : false,
+  // ========== SAVE & LOAD DATA ==========
+  function saveData() {
+    const data = {
+      fullName: fullName?.value || '',
+      phone: phone?.value || '',
+      email: email?.value || '',
+      country: country?.value || '',
+      message: message?.value || '',
+      consent: consent?.checked || false,
       savedAt: new Date().toISOString()
     };
-
-    // Save to localStorage
-    localStorage.setItem('businessFormData', JSON.stringify(formData));
-    console.log('Form data saved to browser storage ✓');
+    localStorage.setItem('formData', JSON.stringify(data));
+    console.log('Data saved ✓');
   }
 
-  function loadFormData() {
-    const savedData = localStorage.getItem('businessFormData');
-    if (savedData) {
-      try {
-        const formData = JSON.parse(savedData);
-        
-        if (fullNameInput) fullNameInput.value = formData.fullName || '';
-        if (phoneInput) phoneInput.value = formData.phone || '';
-        if (emailInput) emailInput.value = formData.email || '';
-        if (countrySelect) countrySelect.value = formData.country || '';
-        if (messageTextarea) messageTextarea.value = formData.message || '';
-        if (consent1) consent1.checked = formData.consent1 || false;
-        if (consent2) consent2.checked = formData.consent2 || false;
-        
-        console.log('Form data loaded from browser storage ✓');
-      } catch (e) {
-        console.error('Error loading form data:', e);
-      }
+  function loadSavedData() {
+    const saved = localStorage.getItem('formData');
+    if (!saved) return;
+
+    try {
+      const data = JSON.parse(saved);
+      if (fullName) fullName.value = data.fullName || '';
+      if (phone) phone.value = data.phone || '';
+      if (email) email.value = data.email || '';
+      if (country) country.value = data.country || '';
+      if (message) message.value = data.message || '';
+      if (consent) consent.checked = data.consent || false;
+      console.log('Data loaded ✓');
+    } catch (e) {
+      console.error('Load error:', e);
     }
   }
 
-  // ==================== FORM VALIDATION ====================
-
+  // ========== VALIDATION ==========
   function validateEmail() {
-    const email = emailInput.value.trim();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-    if (email && !emailRegex.test(email)) {
-      emailInput.style.borderColor = '#ff6b6b';
-      emailInput.title = 'Please enter a valid email address';
-      return false;
-    } else {
-      emailInput.style.borderColor = '#e0dcd5';
-      emailInput.title = '';
-      return true;
-    }
+    const isValid = email.value.trim() === '' || emailRegex.test(email.value);
+    email.style.borderColor = isValid ? '#e0dcd5' : '#ff6b6b';
+    return isValid;
   }
 
   function validatePhone() {
-    const phone = phoneInput.value.trim();
-    // Accept various phone formats
     const phoneRegex = /^[\d\s\-\+\(\)]{7,}$/;
-    
-    if (phone && !phoneRegex.test(phone)) {
-      phoneInput.style.borderColor = '#ff6b6b';
-      phoneInput.title = 'Please enter a valid phone number';
-      return false;
-    } else {
-      phoneInput.style.borderColor = '#e0dcd5';
-      phoneInput.title = '';
-      return true;
-    }
+    const isValid = phone.value.trim() === '' || phoneRegex.test(phone.value);
+    phone.style.borderColor = isValid ? '#e0dcd5' : '#ff6b6b';
+    return isValid;
   }
 
-  function validateForm() {
-    const fullName = fullNameInput ? fullNameInput.value.trim() : '';
-    const phone = phoneInput ? phoneInput.value.trim() : '';
-    const email = emailInput ? emailInput.value.trim() : '';
-
-    if (!fullName) {
-      showError('Please enter your full name');
+  function validateAllFields() {
+    if (!fullName?.value.trim()) {
+      showError('Enter your full name');
       return false;
     }
-    if (!phone) {
-      showError('Please enter your phone number');
+    if (!phone?.value.trim()) {
+      showError('Enter your phone number');
       return false;
     }
-    if (!email) {
-      showError('Please enter your email address');
+    if (!email?.value.trim()) {
+      showError('Enter your email');
       return false;
     }
     if (!validateEmail()) {
-      showError('Please enter a valid email address');
+      showError('Invalid email');
       return false;
     }
     if (!validatePhone()) {
-      showError('Please enter a valid phone number');
+      showError('Invalid phone');
       return false;
     }
-    if (consent1 && !consent1.checked) {
-      showError('Please accept the terms to continue');
+    if (consent && !consent.checked) {
+      showError('Accept terms to continue');
       return false;
     }
-
     return true;
   }
 
-  // ==================== FORM SUBMISSION ====================
-
-  function handleFormSubmit(e) {
+  // ========== FORM SUBMISSION ==========
+  function handleSubmit(e) {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateAllFields()) return;
 
-    // Show loading state
-    const originalText = submitButton.textContent;
-    submitButton.textContent = 'Submitting...';
-    submitButton.disabled = true;
-    submitButton.style.opacity = '0.7';
+    // Show loading
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Submitting...';
+    submitBtn.disabled = true;
 
-    // Get form data
+    // Prepare data
     const formData = {
-      fullName: fullNameInput ? fullNameInput.value.trim() : '',
-      phone: phoneInput ? phoneInput.value.trim() : '',
-      email: emailInput ? emailInput.value.trim() : '',
-      country: countrySelect ? countrySelect.value : '',
-      message: messageTextarea ? messageTextarea.value.trim() : '',
-      consent1: consent1 ? consent1.checked : false,
-      consent2: consent2 ? consent2.checked : false,
-      submittedAt: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-      referrer: document.referrer
+      fullName: fullName?.value.trim() || '',
+      phone: phone?.value.trim() || '',
+      email: email?.value.trim() || '',
+      country: country?.value || '',
+      message: message?.value.trim() || '',
+      consent: consent?.checked || false,
+      submittedAt: new Date().toISOString()
     };
 
-    // Save to localStorage with timestamp
-    const allApplications = JSON.parse(localStorage.getItem('businessApplications') || '[]');
-    allApplications.push(formData);
-    localStorage.setItem('businessApplications', JSON.stringify(allApplications));
+    // Save submission
+    const allSubmissions = JSON.parse(localStorage.getItem('submissions') || '[]');
+    allSubmissions.push(formData);
+    localStorage.setItem('submissions', JSON.stringify(allSubmissions));
 
-    // Log to console (for development/testing)
-    console.log('Application submitted:', formData);
+    console.log('Submitted:', formData);
 
-    // OPTIONAL: Send to external API/Email service
-    // Uncomment and update the endpoint if you have a backend
-    /*
-    fetch('https://your-backend-url.com/api/applications', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Server response:', data);
-      showSuccess('Application submitted successfully! We\'ll contact you soon.');
-      clearForm();
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      showError('There was an error submitting your application. Please try again.');
-    });
-    */
-
-    // Simulate server response delay
+    // Simulate delay
     setTimeout(() => {
-      showSuccess('Application submitted successfully! Check your email for next steps.');
-      clearForm();
-      
-      // Restore button
-      submitButton.textContent = originalText;
-      submitButton.disabled = false;
-      submitButton.style.opacity = '1';
-
-      // Scroll to top
+      showSuccess('Submitted! Check your email.');
+      clearFormData();
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 1500);
   }
 
-  function clearForm() {
-    if (fullNameInput) fullNameInput.value = '';
-    if (phoneInput) phoneInput.value = '';
-    if (emailInput) emailInput.value = '';
-    if (countrySelect) countrySelect.value = '';
-    if (messageTextarea) messageTextarea.value = '';
-    
-    // Keep consent checkboxes as is (user's choice)
-    
-    localStorage.removeItem('businessFormData');
-    console.log('Form cleared');
+  function clearFormData() {
+    if (fullName) fullName.value = '';
+    if (phone) phone.value = '';
+    if (email) email.value = '';
+    if (country) country.value = '';
+    if (message) message.value = '';
+    localStorage.removeItem('formData');
   }
 
-  // ==================== NOTIFICATION SYSTEM ====================
-
-  function showError(message) {
-    const notification = createNotification('error', message);
-    document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 4000);
+  // ========== NOTIFICATIONS ==========
+  function showError(msg) {
+    showNotification('error', '❌ ' + msg);
   }
 
-  function showSuccess(message) {
-    const notification = createNotification('success', message);
-    document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 4000);
+  function showSuccess(msg) {
+    showNotification('success', '✓ ' + msg);
   }
 
-  function createNotification(type, message) {
-    const div = document.createElement('div');
-    div.style.cssText = `
+  function showNotification(type, msg) {
+    const notif = document.createElement('div');
+    notif.style.cssText = `
       position: fixed;
       top: 20px;
       right: 20px;
@@ -277,64 +184,45 @@ document.addEventListener('DOMContentLoaded', function() {
       z-index: 1000;
       animation: slideIn 0.3s ease;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      color: white;
     `;
 
     if (type === 'error') {
-      div.style.backgroundColor = '#ff6b6b';
-      div.style.color = 'white';
-      div.textContent = '❌ ' + message;
+      notif.style.backgroundColor = '#ff6b6b';
     } else {
-      div.style.backgroundColor = '#51cf66';
-      div.style.color = 'white';
-      div.textContent = '✓ ' + message;
+      notif.style.backgroundColor = '#51cf66';
     }
 
-    // Add animation
-    const style = document.createElement('style');
-    if (!document.querySelector('style[data-notification]')) {
-      style.setAttribute('data-notification', 'true');
+    notif.textContent = msg;
+    document.body.appendChild(notif);
+
+    // Add animation once
+    if (!document.querySelector('[data-notif-style]')) {
+      const style = document.createElement('style');
+      style.setAttribute('data-notif-style', 'true');
       style.textContent = `
         @keyframes slideIn {
-          from {
-            transform: translateX(400px);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
+          from { transform: translateX(400px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
         }
       `;
       document.head.appendChild(style);
     }
 
-    return div;
+    setTimeout(() => notif.remove(), 4000);
   }
 
-  // ==================== SMOOTH SCROLL ====================
-  const links = document.querySelectorAll('a[href^="#"]');
-  links.forEach(link => {
+  // ========== SMOOTH SCROLL ==========
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', function(e) {
-      const href = this.getAttribute('href');
-      if (href !== '#' && document.querySelector(href)) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
         e.preventDefault();
-        document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+        target.scrollIntoView({ behavior: 'smooth' });
       }
     });
   });
 
-  // ==================== RESPONSIVE BEHAVIOR ====================
-  window.addEventListener('resize', function() {
-    const form = document.querySelector('.form-card');
-    if (form && window.innerWidth < 480) {
-      form.style.padding = '20px 16px';
-    } else if (form) {
-      form.style.padding = '40px 36px';
-    }
-  });
-
-  // ==================== CONSOLE INFO ====================
-  console.log('%cBusiness Form System Active ✓', 'color: #c9a96e; font-size: 14px; font-weight: bold');
-  console.log('%cForm data saved to: localStorage → businessFormData', 'color: #888; font-size: 12px');
-  console.log('%cAll applications saved to: localStorage → businessApplications', 'color: #888; font-size: 12px');
+  console.log('%cForm System Active ✓', 'color: #c9a96e; font-size: 14px; font-weight: bold');
+  console.log('%cData stored in: localStorage → formData, submissions', 'color: #888; font-size: 12px');
 });
