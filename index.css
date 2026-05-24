@@ -63,8 +63,9 @@ html, body {
   border-radius: 16px;
   object-fit: cover;
   object-position: center;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-  /* animation:fadein 1s ease-out 0.1s both; */
+  box-shadow: 0px 15px 40px rgba(244, 246, 246, 0.872);
+  animation: fade-in 1s ease-out;
+  opacity: 1;
   border: none !important;
   outline: none !important;
   display: block;
@@ -73,22 +74,20 @@ html, body {
   background: transparent !important;
 }  
 
-@keyframes slideDown {
+@keyframes fade-in{
   from {
     opacity: 0;
-    transform: translateY(-40px);
+    transform: scale(0.5);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
   }
 }
 
 /* Hero Text (Name + Tagline) */
 .hero-text {
   color: #fff;
-  animation: fadeIn 1s ease-out 0.2s both;
-  margin-top: 15px;
 }
 
 .hero-text h1 {
@@ -98,6 +97,7 @@ html, body {
   line-height: 1.1;
   margin-bottom: 6px;
   text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 1s ease-out;
 }
 
 .hero-text h1 span {
@@ -113,13 +113,14 @@ html, body {
 
 
 .hero-text .tagline {
-  font-size: 25px;
+  font-size: 29px;
   font-weight: 50;
   letter-spacing: 0.5px;
   margin-top: 15px; 
  line-height: 1.0;  
   opacity: 0.95;
   font-family: 'calibri', sans-serif;
+  animation: fadeIn 1s ease-out;
 }
 
 @keyframes fadeIn {
@@ -145,7 +146,6 @@ html, body {
   width: 130%;
   max-width: 600px;
   margin-top: 15px;
-  animation: fadeIn 1s ease-out 0.4s both;
 }
 
 .btn {
@@ -179,7 +179,6 @@ html, body {
 
 .btn-primary:active {
   transform: translateY(-2px);
-  /* animation:forwards */
 }
 
 /* ════════════════ SOCIAL ROW ════════════════ */
