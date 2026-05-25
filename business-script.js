@@ -5,6 +5,8 @@
   if (!form) return;
 
   const successMessage = document.getElementById('successMessage');
+  console.log('Success Element:', successMessage);
+  const fullName = form.querySelector('input[type="text"]');
   const phone = form.querySelector('input[type="tel"]');
   const iti = window.intlTelInput(phone, {
   initialCountry: "pk",
@@ -61,7 +63,12 @@
 
     if (email) email.addEventListener('blur', validateEmail);
     if (phone) phone.addEventListener('blur', validatePhone);
-    submitBtn.addEventListener('click', handleSubmit);
+    // Better: use real form submit event (works for click + keyboard + browser validation)
+    form.addEventListener('submit', handleSubmit);
+    // fallback in case browser doesn't fire submit for some reason
+    submitBtn?.addEventListener('click', handleSubmit);
+
+
     if (consent) consent.addEventListener('change', saveData);
   }
 
@@ -125,6 +132,19 @@ function validateEmail() {
   return true;
 }
 
+function validateName() {
+
+  const nameError = document.getElementById('fullNameError');
+
+  if (!fullName.value.trim()) {
+    nameError.textContent = 'Full name is required';
+    return false;
+  }
+
+  nameError.textContent = '';
+  return true;
+} 
+
 function validatePhone() {
 
   const phoneError = document.getElementById('phoneError');
@@ -138,20 +158,6 @@ function validatePhone() {
   return true;
 }
 function validateAllFields() {
-
-
-  function validateName() {
-
-  const nameError = document.getElementById('fullNameError');
-
-  if (!fullName.value.trim()) {
-    nameError.textContent = 'Full name is required';
-    return false;
-  }
-
-  nameError.textContent = '';
-  return true;
-}
 
   if (!validateName()) {
 
@@ -229,10 +235,12 @@ function validateAllFields() {
   function handleSubmit(e) {
     e.preventDefault();
     if (!validateAllFields()) return;
+    submitBtn.style.display = 'none';
 
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = 'Submitting...';
-    submitBtn.disabled = true;
+const loader = document.querySelector('.loader');
+loader.style.display = 'block';
+
+submitBtn.disabled = true;
 
     const submissionData = {
       fullName: fullName?.value.trim() || '',
@@ -250,22 +258,21 @@ function validateAllFields() {
 
     console.log('Submitted:', submissionData);
 
-    setTimeout(() => {
-      form.style.display = 'none';
-        successMessage.style.display = 'block';
+setTimeout(() => {
 
-     clearFormData();
+  loader.style.display = 'none';
 
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
-      form.style.display = 'none';
-      successMessage.style.display = 'block';
+  form.style.display = 'none';
 
-clearFormData();
+  successMessage.style.display = 'block';
 
-submitBtn.textContent = originalText;
-submitBtn.disabled = false; });
+  clearFormData();
+
+  submitBtn.disabled = false;
+
+}, 1500);
   }
+
 
   function clearFormData() {
     if (fullName) fullName.value = '';

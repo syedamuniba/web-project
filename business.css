@@ -853,19 +853,31 @@ body {
 
 .form-inner > h2 {
   grid-column: 1;
-  font-size: 45px;
+  font-size: 40px;
   font-weight: 800;
   margin-top: 300px;
   color: black;
-  line-height: 1.15;
+  line-height: 1.2;
   text-transform: capitalize;
+  margin-bottom: -6px;
 }
 
-.form-inner > p {
+.form-inner > p1{
   grid-column: 1;
-  font-size: 20px;
+  font-size: 23px;
   color: black;
-  margin-top: 0;
+  margin-top: -30px;
+  margin-bottom: -10px;
+  line-height: 1.2;
+}
+
+.form-inner > p2 {
+  grid-column: 1;
+  font-size: 22px;
+  color: black;
+  margin-top: -50px;
+  margin-bottom: -100px;
+  line-height: 1.2;
 }
 
 .form-inner .cta-wrap {
@@ -1037,15 +1049,18 @@ body {
 }
 
 #successMessage p {
-  font-size: 18px;
+  font-size: 20px;
   color: black;
+  padding: 40px 20px;
+  text-align: center;
+  margin-top:-150px;
 }
 
 .loader {
-  width: 28px;
-  height: 28px;
+  width: 18px;
+  height: 18px;
   border: 3px solid rgba(255,255,255,0.3);
-  border-top: 3px solid #3b82f6;
+  border-top: 3px solid #124390;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   display: none;
