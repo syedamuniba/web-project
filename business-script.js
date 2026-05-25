@@ -1,32 +1,57 @@
-﻿// ============================================
-// BUSINESS FORM - SIMPLE & EASY TO UNDERSTAND
-// ============================================
-
-document.addEventListener('DOMContentLoaded', function() {
+﻿document.addEventListener('DOMContentLoaded', async function() {
   
-  // Get the form element
   const form = document.querySelector('.form-card');
+  console.log(form);
   if (!form) return;
 
-  // Get all form input elements
+  const successMessage = document.getElementById('successMessage');
   const fullName = form.querySelector('input[type="text"]');
   const phone = form.querySelector('input[type="tel"]');
+  const iti = window.intlTelInput(phone, {
+  initialCountry: "pk",
+  separateDialCode: true,
+  preferredCountries: ["pk", "sa", "ae", "us", "gb"]
+});
   const email = form.querySelector('input[type="email"]');
   const country = form.querySelector('select');
   const message = form.querySelector('textarea');
   const consent = form.querySelector('#consent1');
   const submitBtn = form.querySelector('.btn-submit');
 
-  // Start
+  // 🌍 Countries 
+  await loadCountries();
+  
+  // پھر باقی
   loadSavedData();
   setupListeners();
 
   // ============================================
-  // PART 1: EVENT LISTENERS (User Actions)
+  // 🌍 COUNTRIES LOAD
+  // ============================================
+  
+  async function loadCountries() {
+    try {
+      const response = await fetch('https://restcountries.com/v3.1/all?fields=name');
+      const data = await response.json();
+      const countries = data.map(c => c.name.common).sort();
+      
+      countries.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        country.appendChild(option);
+      });
+      console.log('✓ Countries loaded');
+    } catch (error) {
+      console.log('API fail - using defaults');
+    }
+  }
+
+  // ============================================
+  // PART 1: EVENT LISTENERS
   // ============================================
   
   function setupListeners() {
-    // Save data while user types
     const inputs = [fullName, phone, email, country, message];
     inputs.forEach(input => {
       if (input) {
@@ -35,23 +60,17 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
-    // Check email/phone when user leaves the field
     if (email) email.addEventListener('blur', validateEmail);
     if (phone) phone.addEventListener('blur', validatePhone);
-
-    // Handle form submit
     submitBtn.addEventListener('click', handleSubmit);
-
-    // Save consent checkbox
     if (consent) consent.addEventListener('change', saveData);
   }
 
   // ============================================
-  // PART 2: SAVE & LOAD DATA (localStorage)
+  // PART 2: SAVE & LOAD
   // ============================================
 
   function saveData() {
-    // Collect all form data
     const formData = {
       fullName: fullName?.value || '',
       phone: phone?.value || '',
@@ -61,112 +80,86 @@ document.addEventListener('DOMContentLoaded', function() {
       consent: consent?.checked || false,
       savedAt: new Date().toISOString()
     };
-
-    // Save to browser memory
     localStorage.setItem('formData', JSON.stringify(formData));
     console.log('✓ Data saved');
   }
 
   function loadSavedData() {
-    // Get saved data from browser
     const saved = localStorage.getItem('formData');
     if (!saved) return;
 
     try {
       const data = JSON.parse(saved);
-      
-      // Put saved data back into form fields
       if (fullName) fullName.value = data.fullName || '';
       if (phone) phone.value = data.phone || '';
       if (email) email.value = data.email || '';
       if (country) country.value = data.country || '';
       if (message) message.value = data.message || '';
       if (consent) consent.checked = data.consent || false;
-      
       console.log('✓ Data loaded');
     } catch (e) {
-      console.error('Error loading data:', e);
+      console.error('Error loading:', e);
     }
   }
 
   // ============================================
-  // PART 3: VALIDATION (Check if data is valid)
+  // PART 3: VALIDATION
   // ============================================
 
   function validateEmail() {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = email.value.trim() === '' || emailPattern.test(email.value);
-    
-    // Change border color if invalid
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = email.value.trim() === '' || pattern.test(email.value);
     email.style.borderColor = isValid ? '#e0dcd5' : '#ff6b6b';
     return isValid;
   }
 
   function validatePhone() {
-    const phonePattern = /^[\d\s\-\+\(\)]{7,}$/;
-    const isValid = phone.value.trim() === '' || phonePattern.test(phone.value);
-    
-    // Change border color if invalid
+    const pattern = /^[\d\s\-\+\(\)]{7,}$/;
+    const isValid = phone.value.trim() === '' || pattern.test(phone.value);
     phone.style.borderColor = isValid ? '#e0dcd5' : '#ff6b6b';
     return isValid;
   }
 
   function validateAllFields() {
-    // Check if full name is empty
     if (!fullName?.value.trim()) {
       showError('Enter your full name');
       return false;
     }
-
-    // Check if phone is empty
     if (!phone?.value.trim()) {
       showError('Enter your phone number');
       return false;
     }
-
-    // Check if email is empty
     if (!email?.value.trim()) {
       showError('Enter your email');
       return false;
     }
-
-    // Check if email is valid
     if (!validateEmail()) {
       showError('Invalid email address');
       return false;
     }
-
-    // Check if phone is valid
     if (!validatePhone()) {
       showError('Invalid phone number');
       return false;
     }
-
-    // Check if consent is checked
     if (consent && !consent.checked) {
-      showError('Please accept the terms to continue');
+      showError('Please accept the terms');
       return false;
     }
-
     return true;
   }
 
   // ============================================
-  // PART 4: FORM SUBMISSION (Send data)
+  // PART 4: FORM SUBMIT
   // ============================================
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    // First, check all fields are valid
     if (!validateAllFields()) return;
 
-    // Show loading state
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Submitting...';
     submitBtn.disabled = true;
 
-    // Collect final form data
     const submissionData = {
       fullName: fullName?.value.trim() || '',
       phone: phone?.value.trim() || '',
@@ -177,39 +170,40 @@ document.addEventListener('DOMContentLoaded', function() {
       submittedAt: new Date().toISOString()
     };
 
-    // Save submission to history
     const allSubmissions = JSON.parse(localStorage.getItem('submissions') || '[]');
     allSubmissions.push(submissionData);
     localStorage.setItem('submissions', JSON.stringify(allSubmissions));
 
     console.log('Submitted:', submissionData);
 
-    // Wait 1.5 seconds (simulate sending)
     setTimeout(() => {
-      showSuccess('Submitted! Check your email.');
-      clearFormData();
+      form.style.display = 'none';
+        successMessage.style.display = 'block';
+
+     clearFormData();
+
       submitBtn.textContent = originalText;
       submitBtn.disabled = false;
-      
-      // Scroll to top
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1500);
+      form.style.display = 'none';
+      successMessage.style.display = 'block';
+
+clearFormData();
+
+submitBtn.textContent = originalText;
+submitBtn.disabled = false; });
   }
 
   function clearFormData() {
-    // Empty all form fields
     if (fullName) fullName.value = '';
     if (phone) phone.value = '';
     if (email) email.value = '';
     if (country) country.value = '';
     if (message) message.value = '';
-    
-    // Clear saved data
     localStorage.removeItem('formData');
   }
 
   // ============================================
-  // PART 5: NOTIFICATIONS (Show messages)
+  // PART 5: NOTIFICATIONS
   // ============================================
 
   function showError(message) {
@@ -221,7 +215,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function showNotification(type, message) {
-    // Create notification element
     const notification = document.createElement('div');
     notification.style.cssText = `
       position: fixed;
@@ -237,60 +230,24 @@ document.addEventListener('DOMContentLoaded', function() {
       color: white;
     `;
 
-    // Set color based on type
-    if (type === 'error') {
-      notification.style.backgroundColor = '#ff6b6b'; // Red
-    } else {
-      notification.style.backgroundColor = '#51cf66'; // Green
-    }
-
+    notification.style.backgroundColor = type === 'error' ? '#ff6b6b' : '#51cf66';
     notification.textContent = message;
     document.body.appendChild(notification);
 
-    // Add animation style (only once)
     if (!document.querySelector('[data-notif-style]')) {
       const style = document.createElement('style');
       style.setAttribute('data-notif-style', 'true');
       style.textContent = `
         @keyframes slideIn {
-          from { 
-            transform: translateX(400px); 
-            opacity: 0; 
-          }
-          to { 
-            transform: translateX(0); 
-            opacity: 1; 
-          }
+          from { transform: translateX(400px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
         }
       `;
       document.head.appendChild(style);
     }
 
-    // Remove notification after 4 seconds
     setTimeout(() => notification.remove(), 4000);
   }
 
-  // ============================================
-  // PART 6: SMOOTH SCROLLING (Anchor links)
-  // ============================================
-
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', function(e) {
-      const targetId = this.getAttribute('href');
-      const target = document.querySelector(targetId);
-      
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
-
-  // ============================================
-  // LOG READY MESSAGE
-  // ============================================
-
-  console.log('%cForm System Active ✓', 'color: #c9a96e; font-size: 14px; font-weight: bold');
-  console.log('%cData stored in: localStorage', 'color: #888; font-size: 12px');
-
+  console.log('%cForm Active ✓', 'color: #c9a96e; font-size: 14px; font-weight: bold');
 });
