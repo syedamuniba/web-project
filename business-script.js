@@ -5,7 +5,6 @@
   if (!form) return;
 
   const successMessage = document.getElementById('successMessage');
-  const fullName = form.querySelector('input[type="text"]');
   const phone = form.querySelector('input[type="tel"]');
   const iti = window.intlTelInput(phone, {
   initialCountry: "pk",
@@ -105,7 +104,7 @@
   // ============================================
   // PART 3: VALIDATION
   // ============================================
-
+ 
 function validateEmail() {
 
   const emailError = document.getElementById('emailError');
@@ -138,34 +137,90 @@ function validatePhone() {
   phoneError.textContent = '';
   return true;
 }
+function validateAllFields() {
 
-  function validateAllFields() {
-    if (!fullName?.value.trim()) {
-      showError('Enter your full name');
-      return false;
-    }
-    if (!phone?.value.trim()) {
-      showError('Enter your phone number');
-      return false;
-    }
-    if (!email?.value.trim()) {
-      showError('Enter your email');
-      return false;
-    }
-    if (!validateEmail()) {
-      showError('Invalid email address');
-      return false;
-    }
-    if (!validatePhone()) {
-      showError('Invalid phone number');
-      return false;
-    }
-    if (consent && !consent.checked) {
-      showError('Please accept the terms');
-      return false;
-    }
-    return true;
+
+  function validateName() {
+
+  const nameError = document.getElementById('fullNameError');
+
+  if (!fullName.value.trim()) {
+    nameError.textContent = 'Full name is required';
+    return false;
   }
+
+  nameError.textContent = '';
+  return true;
+}
+
+  if (!validateName()) {
+
+  fullName.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
+  });
+
+  fullName.focus();
+  return false;
+}
+
+  if (!phone?.value.trim()) {
+
+    phone.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    phone.focus();
+    return false;
+  }
+
+  if (!email?.value.trim()) {
+
+    email.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    email.focus();
+    return false;
+  }
+
+  if (!validateEmail()) {
+
+    email.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    email.focus();
+    return false;
+  }
+
+  if (!validatePhone()) {
+
+    phone.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    phone.focus();
+    return false;
+  }
+
+  if (consent && !consent.checked) {
+
+    consent.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    consent.focus();
+    return false;
+  }
+
+  return true;
+}
 
   // ============================================
   // PART 4: FORM SUBMIT

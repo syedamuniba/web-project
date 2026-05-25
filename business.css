@@ -845,7 +845,7 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
-  margin-bottom: 15px;
+  margin-bottom: 1px;
   display: block;
   text-align: left;
   color: black;
@@ -1001,8 +1001,8 @@ body {
 }
 
 .error-message {
-  color: red;
-  font-size: 13px;
+  color: rgb(197, 75, 75);
+  font-size: 16px;
   display: block;
   margin-top: 6px;
 }
@@ -1030,15 +1030,34 @@ body {
 } 
 
 #successMessage h2 {
-  font-size: 36px;
+  font-size: 20px;
    text-align: center;
   color: black;
+  margin-bottom: 80px;
 }
 
 #successMessage p {
   font-size: 18px;
   color: black;
 }
+
+.loader {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: none;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .form-footer {
   text-align: center;
   margin-top: 30px;
