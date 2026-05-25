@@ -106,19 +106,38 @@
   // PART 3: VALIDATION
   // ============================================
 
-  function validateEmail() {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = email.value.trim() === '' || pattern.test(email.value);
-    email.style.borderColor = isValid ? '#e0dcd5' : '#ff6b6b';
-    return isValid;
+function validateEmail() {
+
+  const emailError = document.getElementById('emailError');
+
+  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!email.value.trim()) {
+    emailError.textContent = 'Email is required';
+    return false;
   }
 
-  function validatePhone() {
-    const pattern = /^[\d\s\-\+\(\)]{7,}$/;
-    const isValid = phone.value.trim() === '' || pattern.test(phone.value);
-    phone.style.borderColor = isValid ? '#e0dcd5' : '#ff6b6b';
-    return isValid;
+  if (!pattern.test(email.value)) {
+    emailError.textContent = 'Invalid email address';
+    return false;
   }
+
+  emailError.textContent = '';
+  return true;
+}
+
+function validatePhone() {
+
+  const phoneError = document.getElementById('phoneError');
+
+  if (!phone.value.trim()) {
+    phoneError.textContent = 'Phone number is required';
+    return false;
+  }
+
+  phoneError.textContent = '';
+  return true;
+}
 
   function validateAllFields() {
     if (!fullName?.value.trim()) {
