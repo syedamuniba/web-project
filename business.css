@@ -825,72 +825,64 @@ body {
 }
 
 /* ============== FORM SECTION ============== */
+/* ============== FORM SECTION ============== */
 .form-section {
-  padding: 40px 70px;
+  padding: 60px 70px;
   background: white;
 }
 
 .form-inner {
-  max-width: 1400px;
+  max-width: 100%;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  gap: 60px;
   align-items: flex-start;
 }
 
-.form-inner > span.section-label {
-  grid-column: 1;
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 1px;
-  display: block;
-  text-align: left;
-  color: black;
-}
-
+/* LEFT SIDE */
 .form-inner > h2 {
   grid-column: 1;
-  font-size: 40px;
-  font-weight: 800;
-  margin-top: 300px;
+  font-size: 45px;
+  font-weight: bolder;
   color: black;
   line-height: 1.2;
-  text-transform: capitalize;
-  margin-bottom: -6px;
+  margin-bottom: 5px;
+  margin-top: 400px;
 }
 
-.form-inner > p1{
+.form-inner > p1 {
   grid-column: 1;
-  font-size: 23px;
+  font-size: 22px;
   color: black;
-  margin-top: -30px;
-  margin-bottom: -10px;
+  margin-bottom: 2px;
   line-height: 1.2;
+  display: block;
+  margin-top: -40px;
 }
 
 .form-inner > p2 {
   grid-column: 1;
   font-size: 22px;
   color: black;
-  margin-top: -50px;
-  margin-bottom: -100px;
+  margin-bottom: 30px;
   line-height: 1.2;
+  display: block;
+  margin-top: -55px;
 }
 
 .form-inner .cta-wrap {
   grid-column: 1;
-  text-align: left; 
+  text-align: left;
+  margin-top: -70px;
 }
 
 .form-inner .cta-wrap .btn-cta {
   background: #001a4d;
   color: white;
   border: 3px solid #00d4ff;
-  padding: 14px 35px;
-  font-size: 1.1rem;
+  padding: 16px 30px;
+  font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
   border-radius: 50px;
@@ -901,110 +893,86 @@ body {
 .form-inner .cta-sub {
   display: block;
   font-size: 18px;
-  color: block;
-  margin-top: 5px;
-  font-style: normal;
+  color: black;
+  margin-top: 10px;
   text-align: left;
   font-weight: 400;
 }
 
-.form-no-exp {
-  grid-column: 1;
-  font-size: 1rem;
-  color: #555;
-  margin-top: 20px;
-  text-align: left;
-}
-
+/* RIGHT SIDE FORM */
 .form-card {
   background: #001a4d;
   border: none;
-  border-radius: 0px;
-  padding: 30px 40px;
+  border-radius: 8px;
+  padding: 40px;
   grid-column: 2;
-  grid-row: 1 / span 6;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+  grid-row: 1 / span 10;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
 .form-group {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .form-group label {
   display: block;
-  font-size: 18px;
-  margin-bottom: 12px;
+  font-size: 16px;
+  margin-bottom: 10px;
   color: white;
-  letter-spacing: 0.5px;
+  font-weight: 600;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 12px 14px;
+  padding: 12px 16px;
   border: none;
-  border-radius: 8px;
-  font-family: Arial, sans-serif;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 15px;
   color: #333;
   background: white;
   outline: none;
   box-sizing: border-box;
-  transition: all 0.3s ease;
-}
-
-.form-group input::placeholder,
-.form-group select,
-.form-group textarea::placeholder {
-  color: #999;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
 }
 
 .form-group textarea {
-  height: 120px;
+  height: 100px;
   resize: vertical;
-  font-size: 0.95rem;
-  padding: 14px 18px;
+  font-family: Arial, sans-serif;
 }
 
 .form-group select {
   cursor: pointer;
   appearance: none;
-  padding-right: 30px;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 20px;
   padding-right: 40px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
 }
 
 .checkbox-group {
   display: flex;
   gap: 15px;
   align-items: flex-start;
-  margin-bottom: 25px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
 }
 
 .checkbox-group input[type="checkbox"] {
   flex-shrink: 0;
   width: 20px;
   height: 20px;
-  margin-top: 3px;
+  margin-top: 2px;
   accent-color: #00d4ff;
   cursor: pointer;
 }
 
 .checkbox-group label {
-  font-size: 0.95rem;
+  font-size: 14px;
   color: white;
   line-height: 1.6;
   font-weight: 400;
@@ -1013,82 +981,112 @@ body {
 }
 
 .error-message {
-  color: rgb(197, 75, 75);
-  font-size: 16px;
+  color: #ff6b6b;
+  font-size: 13px;
   display: block;
-  margin-top: 6px;
+  margin-top: 5px;
 }
-
+/* PHONE INPUT FIX */
 .iti {
   width: 100%;
 }
 
+.iti--allow-dropdown input,
 .iti input {
   width: 100%;
-  height: 43px; /* apne design ke according */
+  height: 44px;
+  padding: 12px 16px !important;
   padding-left: 90px !important;
   box-sizing: border-box;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #333;
+  background: white;
+  outline: none;
 }
 
-
 .iti__country-list {
-  width: 260px;
+  width: 100%;
   max-height: 150px;
   font-size: 14px;
 }
 
 .iti__selected-dial-code {
   font-size: 14px;
-} 
-
-#successMessage h2 {
-  font-size: 20px;
-   text-align: center;
-  color: black;
-  margin-bottom: 80px;
+  color: #333;
 }
 
-#successMessage p {
-  font-size: 20px;
-  color: black;
-  padding: 40px 20px;
-  text-align: center;
-  margin-top:-150px;
+.iti__flag {
+  width: 24px;
+  height: 18px;
+}
+
+/* PHONE INPUT KE BAAD KA TEXT SIZE */
+.iti input::placeholder {
+  font-size: 15px;
+  color: #999;
+}
+
+.btn-submit {
+  width: 100%;
+  background: #b6e7ee;
+  color: #001a4d;
+  border: 4px solid white;
+  padding: 16px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-top: 25px;
 }
 
 .loader {
-  width: 18px;
-  height: 18px;
-  border: 3px solid rgba(255,255,255,0.3);
-  border-top: 3px solid #124390;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #00d4ff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   display: none;
-  margin: 20px auto;
+  margin: 15px auto;
 }
 
 @keyframes spin {
-  100% {
-    transform: rotate(360deg);
-  }
+  100% { transform: rotate(360deg); }
 }
 
 .form-footer {
   text-align: center;
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+#successMessage {
+  display: none;
 }
 
 .form-footer a {
   color: white;
-  font-size: 0.9rem;
+  font-size: 18px;
   text-decoration: underline;
-  margin: 0 8px;
+  margin: 6px 4px;
 }
 
+#successMessage p {
+  font-size: 15px;
+  color: black;
+  padding: 40px 20px;
+  text-align: center;
+  margin-top:-300px;
+}
 
 @media (max-width: 1024px) {
+  .form-section {
+    padding: 50px 40px;
+  }
+
   .form-inner {
     grid-template-columns: 1fr;
     gap: 50px;
@@ -1096,46 +1094,26 @@ body {
 
   .form-card {
     grid-column: 1;
-    grid-row: auto;
-    padding: 50px 40px;
   }
 
-  .form-inner > h2 {
-    font-size: 2.8rem;
+  #successMessage {
+    grid-column: 1;
   }
 }
 
 @media (max-width: 768px) {
   .form-section {
-    padding: 50px 15px;
-  }
-
-  .form-inner {
-    gap: 30px;
+    padding: 40px 20px;
   }
 
   .form-card {
-    padding: 40px 30px;
+    padding: 30px;
   }
 
   .form-inner > h2 {
-    font-size: 2rem;
+    font-size: 28px;
   }
-
-  .form-inner > p {
-    font-size: 1rem;
-  }
-
-  .checkbox-group {
-    padding: 15px;
-    gap: 12px;
-  }
-
-  .checkbox-group label {
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-}
+} 
 
 /* ============== FOOTER ============== */
 footer {
